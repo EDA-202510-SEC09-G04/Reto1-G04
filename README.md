@@ -33,7 +33,9 @@ This repository is part of the data structure and algorithms (#EDA) teaching fra
 The students edit this section to add their names, Uniandes emails, and specify which project functionality of the project they will implement.
 
 1.Estudiante-1, Ashlee Yin Romero, a.yin@uniandes.edu.co
+
 1.Estudiante-2, Daniel Galindo, d.galindot@uniandes.edu.co
+
 1.Estudiante-3, Tomás Lozano, t.lozanoc@uniandes.edu.co
 
 [Back to top](#retos-template)

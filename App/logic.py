@@ -1,11 +1,38 @@
 import time
+import os
+import csv
+from DataStructures.List import array_list as lt
+from DataStructures.Queue import queue as q
+from DataStructures.Stack import stack as st 
+
+
+data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
+
+print(data_dir)
+
 
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
     #TODO: Llama a las funciónes de creación de las estructuras de datos
-    pass
+    catalog = {
+        
+        'source' : None,
+        'commodity': None,
+        'statical_category': None,
+        'unit_measurement':None,
+        'state_name': None, 
+        'location': None,
+        'year_collection':None,
+        'freq_collection':None,
+        'reference_period':None,
+        'load_time':None,
+        'value':None
+    
+    }
+
+
 
 
 # Funciones para la carga de datos

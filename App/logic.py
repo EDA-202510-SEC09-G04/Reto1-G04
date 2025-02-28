@@ -1,6 +1,10 @@
 import time
 import os
 import csv
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+
 from DataStructures.List import array_list as lt
 from DataStructures.Queue import queue as q
 from DataStructures.Stack import stack as st 
@@ -17,20 +21,47 @@ def new_logic():
     """
     #TODO: Llama a las funciónes de creación de las estructuras de datos
     
-    pass
+    
+    nueva_lista = lt.new_list()
+    return nueva_lista
+    
 
 
 
 # Funciones para la carga de datos
 
-def load_data(catalog, filename):
+def load_data(catalog):
     """
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    pass
+    
+    
+    files = data_dir + 'agricultural-20.csv'
+    input_file = open(files, newline='',encoding='utf-8')
+    
+    reader = csv.reader(input_file)
+    
+    for row in reader:
+        
+        lt.add_last(catalog,row)
+        
+        
+        
+    
 
 # Funciones de consulta sobre el catálogo
+
+
+catalogo = new_logic()
+
+load_data(catalogo)
+
+
+print(catalogo)
+
+
+
 
 def get_data(catalog, id):
     """

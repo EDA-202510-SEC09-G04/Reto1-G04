@@ -1,12 +1,24 @@
 import sys
+import App.logic as logic
+from tabulate import tabulate
 
 
 def new_logic():
     """
         Se crea una instancia del controlador
     """
-    #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    control = logic.new_logic()
+    return control
+
+def format_table(data, headers, max_col_width=15):
+    """Funcion de formateo de la tabla"""
+    formatted_data = [
+        [str(row[col])[:max_col_width] + ("..." if len(str(row[col])) > max_col_width else "") for col in headers]
+        for row in data
+    ]
+
+    return tabulate(formatted_data, headers=headers, tablefmt="grid")
+
 
 def print_menu():
     print("Bienvenido")
@@ -25,9 +37,8 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
-
+    registros, size, menor, mayor, primeros, ultimos, headers = logic.load_data(control)
+    return registros, size, menor, mayor, primeros, ultimos, headers
 
 def print_data(control, id):
     """
@@ -115,7 +126,19 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
-            data = load_data(control)
+            registros, size, menor, mayor, primeros, ultimos, headers = load_data(control)
+            
+            print(f"Total registros cargados: {size}")
+            
+            print(f"Menor año de recolección de registro: {menor}")
+            print(f"Mayor año de recolección de registro: {mayor}")
+            
+            print("\nPrimeros 5 registros:")
+            print(format_table(primeros,headers,max_col_width=12))
+
+            print("\nÚltimos 5 registros:")
+            print(format_table(ultimos,headers, max_col_width=12))
+            
         elif int(inputs) == 2:
             print_req_1(control)
 

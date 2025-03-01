@@ -2,6 +2,8 @@ import time
 import os
 import csv
 import sys
+import pprint
+from tabulate import tabulate
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
@@ -12,53 +14,63 @@ from DataStructures.Stack import stack as st
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
-print(data_dir)
 
+
+""" #plantilla para tomar tiempo
+start_time = time.time()
+#funcion llamado
+end_time = time.time() 
+execution_time = end_time - start_time 
+print(f"\nTiempo de ejecución: {execution_time:.6f} segundos")
+ """
 
 def new_logic():
     """
     Crea el catalogo para almacenar las estructuras de datos
     """
-    #TODO: Llama a las funciónes de creación de las estructuras de datos
+    
+    catalog = {
+        'registros' : None
+    }
+    catalog['registros'] = lt.new_list()
+    return catalog
     
     
-    nueva_lista = lt.new_list()
-    return nueva_lista
-    
-
-
-
 # Funciones para la carga de datos
 
 def load_data(catalog):
     """
     Carga los datos del reto
     """
-    # TODO: Realizar la carga de datos
-    
-    
     files = data_dir + 'agricultural-20.csv'
-    input_file = open(files, newline='',encoding='utf-8')
     
-    reader = csv.reader(input_file)
+    input_file = csv.DictReader(open(files, encoding='utf-8'))
+    for row in input_file:
+        lt.add_last(catalog['registros'], row)
     
-    for row in reader:
+    headers = ['year_collection','load_time','state_name','source','unit_measurement','value']
+    size = lt.size(catalog['registros'])
+    primeros, ultimos = head_y_tail(catalog)
+    menor, mayor = menor_mayor(catalog)
+    registros = catalog['registros']['elements']
+    
+    return registros, size, menor, mayor, primeros, ultimos, headers
         
-        lt.add_last(catalog,row)
-        
-        
-        
+       
+def head_y_tail(catalog):
+    head = catalog['registros']['elements'][:5]
+    size = catalog['registros']['size'] 
+    tail = catalog['registros']['elements'][size - 5:size]
+    return head, tail
+
+def menor_mayor(catalog):
+    size = catalog['registros']['size']
+    elementos = catalog['registros']['elements']
+    a = [int(elementos[i]["year_collection"]) for i in range(size) if "year_collection" in elementos[i]]
+    return min(a),max(a)
     
 
 # Funciones de consulta sobre el catálogo
-
-
-catalogo = new_logic()
-
-load_data(catalogo)
-
-
-print(catalogo)
 
 
 

@@ -63,14 +63,29 @@ def print_req_2(control):
     pass
 
 
-def print_req_3(control):
+def print_req_3(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    res = logic.req_3(control, departamento, inicial, final)
+    headers = ['source','year_collection','load_time','freq_collection','commodity','unit_measurement']
+    size = res['size']
+    elements = res['elements'][:size]
+    if size == 0:
+        print('No se encontraron registros para esos parámetros. Intente de nuevo.')
+    else:
+        if res['size'] > 20:
+            head, tail = logic.head_y_tail(res)
+            print("\nPrimeros 5 registros:")
+            print(format_table(head,headers,max_col_width=12))
 
-
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail,headers, max_col_width=12))
+        else:
+            print(format_table(elements, headers, max_col_width=12))
+        print('Total registros encontrados: ' + str(size))
+        
+        
 def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
@@ -143,10 +158,13 @@ def main():
             print_req_1(control)
 
         elif int(inputs) == 3:
-            print_req_2(control)
+            print_req_2()
 
         elif int(inputs) == 4:
-            print_req_3(control)
+            departamento = input('Ingrese el departamento que quiere consultar: ')
+            inicial = int(input('Ingrese el año inicial de búsqueda: '))
+            final = int(input('Ingrese el año final de búsqueda: '))
+            print_req_3(control, departamento, inicial, final)
 
         elif int(inputs) == 5:
             print_req_4(control)

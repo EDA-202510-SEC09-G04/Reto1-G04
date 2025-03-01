@@ -50,17 +50,17 @@ def load_data(catalog):
     
     headers = ['year_collection','load_time','state_name','source','unit_measurement','value']
     size = lt.size(catalog['registros'])
-    primeros, ultimos = head_y_tail(catalog)
+    primeros, ultimos = head_y_tail(catalog['registros'])
     menor, mayor = menor_mayor(catalog)
     registros = catalog['registros']['elements']
     
     return registros, size, menor, mayor, primeros, ultimos, headers
         
        
-def head_y_tail(catalog):
-    head = catalog['registros']['elements'][:5]
-    size = catalog['registros']['size'] 
-    tail = catalog['registros']['elements'][size - 5:size]
+def head_y_tail(registros):
+    head = registros['elements'][:5]
+    size = registros['size'] 
+    tail = registros['elements'][size - 5:size]
     return head, tail
 
 def menor_mayor(catalog):
@@ -99,13 +99,22 @@ def req_2(catalog):
     pass
 
 
-def req_3(catalog):
+def req_3(catalog, departamento, inicial, final):
     """
-    Retorna el resultado del requerimiento 3
+    Listar los registros recopilados según el nombre del departamento para un periodo de tiempo de interés 
     """
-    # TODO: Modificar el requerimiento 3
-    pass
+    registros = catalog['registros']['elements']
+    size = catalog['registros']['size']
+    respuestas = lt.new_list()
+    
+    i = 0
+    while i < size and registros[i] != None:
+        
+        if registros[i]['state_name'] == departamento and int(registros[i]['year_collection']) >= inicial and int(registros[i]['year_collection']) <= final:
+            lt.add_last(respuestas, registros[i])
+        i += 1
 
+    return respuestas
 
 def req_4(catalog):
     """

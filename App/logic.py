@@ -106,15 +106,21 @@ def req_3(catalog, departamento, inicial, final):
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     respuestas = lt.new_list()
-    
+    census = 0
+    survey = 0
     i = 0
     while i < size and registros[i] != None:
         
         if registros[i]['state_name'] == departamento and int(registros[i]['year_collection']) >= inicial and int(registros[i]['year_collection']) <= final:
             lt.add_last(respuestas, registros[i])
+            if registros[i]['source'] == 'CENSUS':
+                census +=1
+            if registros[i]['source'] == 'SURVEY':
+                survey +=1
+            
         i += 1
 
-    return respuestas
+    return respuestas, census, survey
 
 def req_4(catalog):
     """

@@ -67,7 +67,7 @@ def print_req_3(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    res = logic.req_3(control, departamento, inicial, final)
+    res, census, survey = logic.req_3(control, departamento, inicial, final)
     headers = ['source','year_collection','load_time','freq_collection','commodity','unit_measurement']
     size = res['size']
     elements = res['elements'][:size]
@@ -84,6 +84,8 @@ def print_req_3(control, departamento, inicial, final):
         else:
             print(format_table(elements, headers, max_col_width=12))
         print('Total registros encontrados: ' + str(size))
+        print('Total registros encontrados con fuente census: ' + str(census))
+        print('Total registros encontrados con fuente survey: ' + str(survey))
         
         
 def print_req_4(control):

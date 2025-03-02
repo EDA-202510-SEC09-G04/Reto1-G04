@@ -1,12 +1,24 @@
 import sys
+import App.logic as logic
+from tabulate import tabulate
 
 
 def new_logic():
     """
         Se crea una instancia del controlador
     """
-    #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    control = logic.new_logic()
+    return control
+
+def format_table(data, headers, max_col_width=15):
+    """Funcion de formateo de la tabla"""
+    formatted_data = [
+        [str(row[col])[:max_col_width] + ("..." if len(str(row[col])) > max_col_width else "") for col in headers]
+        for row in data
+    ]
+
+    return tabulate(formatted_data, headers=headers, tablefmt="grid")
+
 
 def print_menu():
     print("Bienvenido")
@@ -25,9 +37,8 @@ def load_data(control):
     """
     Carga los datos
     """
-    #TODO: Realizar la carga de datos
-    pass
-
+    registros, size, menor, mayor, primeros, ultimos, headers = logic.load_data(control)
+    return registros, size, menor, mayor, primeros, ultimos, headers
 
 def print_data(control, id):
     """
@@ -52,14 +63,31 @@ def print_req_2(control):
     pass
 
 
-def print_req_3(control):
+def print_req_3(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    res, census, survey = logic.req_3(control, departamento, inicial, final)
+    headers = ['source','year_collection','load_time','freq_collection','commodity','unit_measurement']
+    size = res['size']
+    elements = res['elements'][:size]
+    if size == 0:
+        print('No se encontraron registros para esos parámetros. Intente de nuevo.')
+    else:
+        if res['size'] > 20:
+            head, tail = logic.head_y_tail(res)
+            print("\nPrimeros 5 registros:")
+            print(format_table(head,headers,max_col_width=12))
 
-
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail,headers, max_col_width=12))
+        else:
+            print(format_table(elements, headers, max_col_width=12))
+        print('Total registros encontrados: ' + str(size))
+        print('Total registros encontrados con fuente census: ' + str(census))
+        print('Total registros encontrados con fuente survey: ' + str(survey))
+        
+        
 def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
@@ -115,15 +143,30 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
-            data = load_data(control)
+            registros, size, menor, mayor, primeros, ultimos, headers = load_data(control)
+            
+            print(f"Total registros cargados: {size}")
+            
+            print(f"Menor año de recolección de registro: {menor}")
+            print(f"Mayor año de recolección de registro: {mayor}")
+            
+            print("\nPrimeros 5 registros:")
+            print(format_table(primeros,headers,max_col_width=12))
+
+            print("\nÚltimos 5 registros:")
+            print(format_table(ultimos,headers, max_col_width=12))
+            
         elif int(inputs) == 2:
             print_req_1(control)
 
         elif int(inputs) == 3:
-            print_req_2(control)
+            print_req_2()
 
         elif int(inputs) == 4:
-            print_req_3(control)
+            departamento = input('Ingrese el departamento que quiere consultar: ')
+            inicial = int(input('Ingrese el año inicial de búsqueda: '))
+            final = int(input('Ingrese el año final de búsqueda: '))
+            print_req_3(control, departamento, inicial, final)
 
         elif int(inputs) == 5:
             print_req_4(control)

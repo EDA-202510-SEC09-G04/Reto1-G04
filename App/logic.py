@@ -92,7 +92,7 @@ def get_data(catalog, id):
 
 
 
-def ultimo_registro(catalogo,año):
+def ultimo_registro(catalogo,anio):
     
     elementos = catalogo['registros']['elements']
     size = catalogo['registros']['size']
@@ -108,7 +108,7 @@ def ultimo_registro(catalogo,año):
             
             year = int(index_el['year_collection'])
             
-            if year == año:
+            if year == anio:
                 
                 lt.add_last(elementos_list, index_el)
                     
@@ -121,16 +121,16 @@ def ultimo_registro(catalogo,año):
     
 
 
-def req_1(catalog,año_interes):
+def req_1(catalog,anio_interes):
     """
     Retorna el resultado del requerimiento 1
     """
     
-    # TODO: Modificar el requerimiento 1
+   
     
-    inicio = time.time()
-    result = ultimo_registro(catalog,año_interes)
-    fin = time.time()
+    inicio = get_time()
+    result = ultimo_registro(catalog,anio_interes)
+    fin = get_time()
     dif = fin - inicio
     
     
@@ -140,15 +140,56 @@ def req_1(catalog,año_interes):
     
 
     
+def registro_departamento(catalogo,dep):
+    
+    elementos = catalogo['registros']['elements']
+    size = catalogo['registros']['size']
+    i = 0
+    mayor = 0 
+    num_datos = 0
+    ultimo_registro = None
+    
+    while i < size and elementos[i] is not None:
+        
+        tiempo_carga = datetime.strptime(elementos[i]['load_time'])
+        departamento = elementos[i]['state_name']
+        
+        if mayor < tiempo_carga and departamento == dep :
+            
+            mayor = tiempo_carga
+            ultimo_registro= elementos[i]
+            
+        
+        if departamento == dep:
+            
+            num_datos += 1
+            
+        
+        
+        i += 1
+        
+        
+    return num_datos,ultimo_registro
+            
+            
+            
+            
+    
     
 
 
-def req_2(catalog):
+def req_2(catalog,dep):
     """
     Retorna el resultado del requerimiento 2
     """
-    # TODO: Modificar el requerimiento 2
-    pass
+    inicio = get_time()
+    resultado = registro_departamento(catalog,dep)
+    final = get_time()
+    
+    dif = final -inicio
+    
+    
+    return dif, resultado
 
 
 def req_3(catalog, departamento, inicial, final):
@@ -177,12 +218,82 @@ def req_3(catalog, departamento, inicial, final):
 
     return respuestas, census, survey, tiempo_total
 
-def req_4(catalog):
+
+def registros_producto(catalogo,prod,anio_inicial,anio_final):
+    
+    
+     elementos = catalogo['registros']['elements']
+     size = elementos['registros']['size']
+     
+     elementos_list = lt.new_list()
+     census = 0
+     survey = 0 
+     i = 0
+     
+     while i < size and elementos[i] != None:
+         
+        index_el = elementos[i]
+        index_el_year = elementos[i]['year_collection']
+        index_el_prod = elementos[i]['commodity']
+        index_el_org = elementos[i]['source']
+        
+        if index_el_prod == prod and  anio_inicial < index_el_year < anio_final:
+            
+             if index_el_org == 'SURVEY':
+                 
+                 survey += 1
+                 
+             if index_el_org == 'CENSUS':
+                 
+                 census += 1
+                 
+            
+             new_resiter = {
+                 'source' : index_el_org,
+                 'year_collection': index_el_year,
+                 'load_time': index_el['load_time'],
+                 'freq_collection': index_el['freq_collection'],
+                 'state_name':index_el['state_name'],
+                 'unit_measurement':index_el['unit_measurement']
+                 
+             }
+                 
+             lt.add_last(elementos_list,new_resiter)
+             
+    
+    
+    
+     if lt.size(elementos_list) > 20:
+         
+         return [elementos_list['elements'][:5], elementos_list['elements'][-5:]] , lt.size(elementos_list) , survey, census   
+     
+     else:
+         
+         return elementos_list, lt.size(elementos_list), survey,census
+            
+            
+
+
+catalogo = new_logic()
+
+load_data(catalogo)
+
+
+
+def req_4(catalog,prod,anio_inicial,anio_final):
     """
     Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 4
-    pass
+    inicio = get_time()
+    resultado = registros_producto(catalog,prod,anio_inicial,anio_final)
+    final = get_time()
+    dif = final - inicio
+    
+    return dif, resultado
+
+
+print(req_4(catalogo,'HOGS',1990,2007))
+
 
 
 def req_5(catalog,categoria, anio_inicial, anio_final):

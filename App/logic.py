@@ -97,25 +97,34 @@ def ultimo_registro(catalogo,anio):
     elementos = catalogo['registros']['elements']
     size = catalogo['registros']['size']
     elementos_list = lt.new_list()
+    mayor = 0 
+    datos = 0
     i = 0
     
-    while  i < size:
+    while  i < size and elementos[i] is not None:
         
-        index_el = elementos[size-i-1]
+        tiempo_carga = datetime.striptime(elementos[i]['load_time'])
+        index_el = elementos[i]
         
         if index_el is not  None and 'year_collection' in index_el:
             
             
             year = int(index_el['year_collection'])
             
-            if year == anio:
+            if year == anio and mayor < tiempo_carga:
                 
                 lt.add_last(elementos_list, index_el)
+                
+            elif year == anio:
+                 
+                 datos += 1
+                 
+                 
                     
         i += 1
         
         
-    return lt.first_element(elementos_list), lt.size(elementos_list)
+    return lt.first_element(elementos_list), datos
     
     
     

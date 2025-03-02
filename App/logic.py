@@ -30,7 +30,7 @@ def new_logic():
 
 # Funciones para la carga de datos
 
-def load_data(catalog):
+def load_data(catalog,filename):
     """
     Carga los datos del reto
     """

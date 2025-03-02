@@ -4,6 +4,7 @@ import csv
 import sys
 import pprint
 from tabulate import tabulate
+from datetime import datetime
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
@@ -171,13 +172,41 @@ def req_5(catalog,categoria, anio_inicial, anio_final):
     
     return respuestas, census_contador, survey_contador, tiempo_total
 
-def req_6(catalog):
+def req_6(catalog, departamento, inicial, final):
     """
     Retorna el resultado del requerimiento 6
     """
-    # TODO: Modificar el requerimiento 6
-    pass
+    tiempo_inicial = get_time()
+    
+    registros = catalog['registros']['elements']
+    size = catalog['registros']['size']
+    
+    respuestas = lt.new_list()
+    i = 0
+    census = 0
+    survey = 0
+    
+    inicial = inicial.strip()
+    final = final.strip()
+    
+    while i < size and registros[i] != None:
+        
+        fecha = registros[i]['load_time'][:10]
+     
+        if registros[i]['state_name'] == departamento and fecha < final and fecha > inicial:
+            
+            lt.add_last(respuestas, registros[i])
+            if registros[i]['source'] == 'CENSUS':
+                census +=1 
+            
+            if registros[i]['source'] == 'SURVEY':
+                survey+=1
+        
+        i+=1
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
 
+    return respuestas, census, survey, tiempo_total
 
 def req_7(catalog, departamento, inicial, final):
     """

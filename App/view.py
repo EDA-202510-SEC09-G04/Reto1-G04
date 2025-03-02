@@ -144,13 +144,32 @@ def print_req_5(control):
             print(format_table(elements, encabezados, max_col_width=12))
 
 
-def print_req_6(control):
+def print_req_6(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    respuestas, census, survey, tiempo_total = logic.req_6(control, departamento, inicial, final)
+    size = respuestas['size']
+    elements = respuestas['elements'][:size]
+    encabezados = ['source', 'year_collection', 'load_time', 'freq_collection','state_name', 'unit_measurement', 'commodity']
 
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
+    print(f"Total registros encontrados: {size}")
+    print(f"Total registros encontrados con fuente CENSUS: {census}")
+    print(f"Total registros encontrados con fuente SURVEY: {survey}")
+
+    if size == 0:
+        print('No se encontraron registros para esos parámetros.')
+    else:
+        if size > 20:
+            head, tail = logic.head_y_tail(respuestas)
+            print("\nPrimeros 5 registros:")
+            print(format_table(head, encabezados, max_col_width=12))
+
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail, encabezados, max_col_width=12))
+        else:
+            print(format_table(elements, encabezados, max_col_width=12))
 
 def print_req_7(control, departamento, inicial, final):
     """
@@ -287,7 +306,10 @@ def main():
             print_req_5(control)
 
         elif int(inputs) == 7:
-            print_req_6(control)
+            departamento = input('Ingrese el departamento que quiere consultar: ')
+            inicial = input('Ingrese la fecha inicial de búsqueda (%Y-%m-%d)": ')
+            final = input('Ingrese la fecha final de búsqueda (%Y-%m-%d): ')
+            print_req_6(control, departamento, inicial, final)
 
         elif int(inputs) == 8:
             departamento = input('Ingrese el departamento que quiere consultar: ')

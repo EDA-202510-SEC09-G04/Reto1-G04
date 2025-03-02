@@ -42,6 +42,7 @@ def load_data(catalog):
     """
     Carga los datos del reto
     """
+    tiempo_inicial = get_time()
     files = data_dir + 'agricultural-20.csv'
     
     input_file = csv.DictReader(open(files, encoding='utf-8'))
@@ -54,7 +55,10 @@ def load_data(catalog):
     menor, mayor = menor_mayor(catalog)
     registros = catalog['registros']['elements']
     
-    return registros, size, menor, mayor, primeros, ultimos, headers
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+    
+    return registros, size, menor, mayor, primeros, ultimos, headers, tiempo_total
         
        
 def head_y_tail(registros):
@@ -140,13 +144,14 @@ def req_5(catalog,categoria, anio_inicial, anio_final):
     """
     Retorna el resultado del requerimiento 5
     """
+    tiempo_inicial = get_time()
+    
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     respuestas = lt.new_list()
     census_contador = 0
     survey_contador = 0
-    
-    tiempo_inicial = get_time()
+
     
     i = 0
     while i < size and registros[i] != None:

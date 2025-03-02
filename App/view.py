@@ -51,8 +51,8 @@ def load_data(control):
     """
     Carga los datos
     """
-    registros, size, menor, mayor, primeros, ultimos, headers = logic.load_data(control)
-    return registros, size, menor, mayor, primeros, ultimos, headers
+    registros, size, menor, mayor, primeros, ultimos, headers, tiempo_total = logic.load_data(control)
+    return registros, size, menor, mayor, primeros, ultimos, headers, tiempo_total
 
 def print_data(control, id):
     """
@@ -252,10 +252,9 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
-            tiempo_inicial = get_time()
-            registros, size, menor, mayor, primeros, ultimos, headers = load_data(control)
-            tiempo_final = get_time()
-            tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+            
+            registros, size, menor, mayor, primeros, ultimos, headers, tiempo_total = load_data(control)
+            
             print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
             
             print(f"Total registros cargados: {size}")

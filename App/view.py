@@ -141,7 +141,7 @@ def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
+   
     producto = input("Ingrese el tipo de producto a filtrar (ej. 'HOGS', 'SHEEP'): ")
     anio_inicial = int(input("Ingrese el año inicial de búsqueda: "))
     anio_final = int(input("Ingrese el año final de búsqueda: "))

@@ -17,6 +17,23 @@ data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
 
 
 
+# Funciones para calcular el tiempo
+
+def get_time():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def delta_time(start, end):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed
+
+
 """ #plantilla para tomar tiempo
 start_time = time.time()
 #funcion llamado
@@ -232,7 +249,7 @@ def registros_producto(catalogo,prod,anio_inicial,anio_final):
     
     
      elementos = catalogo['registros']['elements']
-     size = elementos['registros']['size']
+     size = catalogo['registros']['size']
      
      elementos_list = lt.new_list()
      census = 0
@@ -246,7 +263,7 @@ def registros_producto(catalogo,prod,anio_inicial,anio_final):
         index_el_prod = elementos[i]['commodity']
         index_el_org = elementos[i]['source']
         
-        if index_el_prod == prod and  anio_inicial < index_el_year < anio_final:
+        if index_el_prod == prod and  anio_inicial < int(index_el_year) < anio_final:
             
              if index_el_org == 'SURVEY':
                  
@@ -269,6 +286,7 @@ def registros_producto(catalogo,prod,anio_inicial,anio_final):
                  
              lt.add_last(elementos_list,new_resiter)
              
+        i += 1
     
     
     
@@ -533,16 +551,3 @@ def req_8(catalog):
 
 # Funciones para medir tiempos de ejecucion
 
-def get_time():
-    """
-    devuelve el instante tiempo de procesamiento en milisegundos
-    """
-    return float(time.perf_counter()*1000)
-
-
-def delta_time(start, end):
-    """
-    devuelve la diferencia entre tiempos de procesamiento muestreados
-    """
-    elapsed = float(end - start)
-    return elapsed

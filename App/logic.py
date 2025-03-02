@@ -83,12 +83,56 @@ def get_data(catalog, id):
     pass
 
 
-def req_1(catalog):
+
+def ultimo_registro(catalogo,año):
+    
+    elementos = catalogo['registros']['elements']
+    size = catalogo['registros']['size']
+    elementos_list = lt.new_list()
+    i = 0
+    
+    while  i < size:
+        
+        index_el = elementos[size-i-1]
+        
+        if index_el is not  None and 'year_collection' in index_el:
+            
+            
+            year = int(index_el['year_collection'])
+            
+            if year == año:
+                
+                lt.add_last(elementos_list, index_el)
+                    
+        i += 1
+        
+        
+    return lt.first_element(elementos_list), lt.size(elementos_list)
+    
+    
+    
+
+
+def req_1(catalog,año_interes):
     """
     Retorna el resultado del requerimiento 1
     """
+    
     # TODO: Modificar el requerimiento 1
-    pass
+    
+    inicio = time.time()
+    result = ultimo_registro(catalog,año_interes)
+    fin = time.time()
+    dif = fin - inicio
+    
+    
+    return dif , result
+    
+    
+    
+
+    
+    
 
 
 def req_2(catalog):

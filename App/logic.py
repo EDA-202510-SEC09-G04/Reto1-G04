@@ -133,12 +133,34 @@ def req_4(catalog):
     pass
 
 
-def req_5(catalog):
+def req_5(catalog,categoria, anio_inicial, anio_final):
     """
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    pass
+    registros = catalog['registros']['elements']
+    size = catalog['registros']['size']
+    respuestas = lt.new_list()
+    census_contador = 0
+    survey_contador = 0
+    
+    tiempo_inicial = get_time()
+    
+    for i in range(size):
+        registro = registros[i]
+        año = int(registro['year_collection'])
+        
+        if registro["statical_category"] == categoria and anio_inicial <= año <= anio_final:
+            lt.add_last(respuestas, registro)
+            if registro['source'] == 'CENSUS':
+                census_contador += 1
+            elif registro['source'] == 'SURVEY':
+                survey_contador += 1
+                
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+    
+    return respuestas, census_contador, survey_contador, tiempo_total
 
 def req_6(catalog):
     """

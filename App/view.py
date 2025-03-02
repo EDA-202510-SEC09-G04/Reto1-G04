@@ -93,15 +93,63 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    categoria = input('Ingrese la categoría que quiere consultar: ')
+    anio_inicial = int(input('Ingrese el año inicial de búsqueda: '))
+    anio_final = int(input('Ingrese el año final de búsqueda: '))
+    
+    respuestas,census_contador, survey_contador, tiempo_total = logic.req_4(control, categoria, anio_inicial, anio_final)
+    encabezados = ['source', 'year_collection', 'load_time', 'freq_collection', 'state_name', 'unit_measurement', 'commodity']
+    size = respuestas['size']
+    elementos = respuestas['elements'][:size]
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
+    print(f"Total registros encontrados: {size}")
+    print(f"Total registros encontrados con fuente CENSUS: {census_contador}")
+    print(f"Total registros encontrados con fuente SURVEY: {survey_contador}")
+    
+    if size == 0:
+        print('No se encontraron registros para esos parámetros. Intente de nuevo.')
+    else:
+        if size > 20:
+            head, tail = logic.head_y_tail(respuestas)
+            print("\nPrimeros 5 registros:")
+            print(format_table(head, encabezados, max_col_width=12))
 
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail, encabezados, max_col_width=12))
+        else:
+            print(format_table(elementos, encabezados, max_col_width=12))
 
 def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
+    categoria = input('Ingrese la categoría estadística a filtrar (ej. "INVENTORY", "SALES"): ')
+    anio_inicial = int(input('Ingrese el año inicial de búsqueda: '))
+    anio_final = int(input('Ingrese el año final de búsqueda: '))
+
+    respuestas, census_contador, survey_contador, tiempo_total = logic.req_5(control, categoria, anio_inicial, anio_final)
+    encabezados = ['source', 'year_collection', 'load_time', 'freq_collection', 'state_name', 'unit_measurement', 'commodity']
+    size = respuestas['size']
+    elements = respuestas['elements'][:size]
+
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
+    print(f"Total registros encontrados: {size}")
+    print(f"Total registros encontrados con fuente CENSUS: {census_contador}")
+    print(f"Total registros encontrados con fuente SURVEY: {survey_contador}")
+
+    if size == 0:
+        print('No se encontraron registros para esos parámetros.')
+    else:
+        if size > 20:
+            head, tail = logic.head_y_tail(respuestas)
+            print("\nPrimeros 5 registros:")
+            print(format_table(head, encabezados, max_col_width=12))
+
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail, encabezados, max_col_width=12))
+        else:
+            print(format_table(elements, encabezados, max_col_width=12))
 
 
 def print_req_6(control):

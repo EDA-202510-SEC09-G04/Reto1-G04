@@ -160,14 +160,45 @@ def print_req_6(control):
     pass
 
 
-def print_req_7(control):
+def print_req_7(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 7 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    
+    registros_total, min_anio, min_valor, min_regtotal, min_regval, min_reginval, minsur, mincen, max_anio, max_valor, max_regtotal, max_regval, max_reginval, maxsur, maxcen = logic.req_7(control, departamento, inicial, final)
+    if min_anio == max_anio:
+        print('El menor y el mayor periodo de tiempo son el mismo.')
+    
+    print('Tiempo de ejecución: \n')
+    print('Número total de registros  que cumplieron el filtro: ' + str(registros_total))
+    
+    min_data = [
+    ["Año", min_anio],
+    ["Valor ingresos", "{:,.0f}".format(min_valor)],
+    ["Registros en periodo", min_regtotal],
+    ["Registros válidos", min_regval],
+    ["Registros inválidos", min_reginval],
+    ["# Census", mincen],
+    ["# Survey", minsur]
+    ]
+    
+    max_data = [
+    ["Año", max_anio],
+    ["Valor ingresos", "{:,.0f}".format(max_valor)],
+    ["Registros en periodo", max_regtotal],
+    ["Registros válidos", max_regval],
+    ["Registros inválidos", max_reginval],
+    ["# Census", maxcen],
+    ["# Survey", maxsur]
+]
 
+    print("\nPERIODO DE MENOR INGRESO")
+    print(tabulate(min_data, tablefmt="grid"))
 
+    print("\n PERIODO DE MAYOR INGRESO")
+    print(tabulate(max_data, tablefmt="grid"))
+    
+    
 def print_req_8(control):
     """
         Función que imprime la solución del Requerimiento 8 en consola
@@ -226,7 +257,11 @@ def main():
             print_req_6(control)
 
         elif int(inputs) == 8:
-            print_req_7(control)
+            departamento = input('Ingrese el departamento que quiere consultar: ')
+            inicial = int(input('Ingrese el año inicial de búsqueda: '))
+            final = int(input('Ingrese el año final de búsqueda: '))
+            print_req_7(control, departamento, inicial, final)
+            
 
         elif int(inputs) == 9:
             print_req_8(control)

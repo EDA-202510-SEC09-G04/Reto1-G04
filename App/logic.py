@@ -106,6 +106,7 @@ def req_3(catalog, departamento, inicial, final):
     """
     Listar los registros recopilados según el nombre del departamento para un periodo de tiempo de interés 
     """
+    tiempo_inicial = get_time()
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     respuestas = lt.new_list()
@@ -122,8 +123,10 @@ def req_3(catalog, departamento, inicial, final):
                 survey +=1
             
         i += 1
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
 
-    return respuestas, census, survey
+    return respuestas, census, survey, tiempo_total
 
 def req_4(catalog):
     """
@@ -137,7 +140,6 @@ def req_5(catalog,categoria, anio_inicial, anio_final):
     """
     Retorna el resultado del requerimiento 5
     """
-    # TODO: Modificar el requerimiento 5
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     respuestas = lt.new_list()
@@ -174,6 +176,8 @@ def req_7(catalog, departamento, inicial, final):
     """
     Retorna el resultado del requerimiento 7
     """
+    tiempo_inicial = get_time()
+    
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     anios = {}
@@ -230,13 +234,15 @@ def req_7(catalog, departamento, inicial, final):
 
     min_regtotal, min_regval, min_reginval, minsur, mincen = anios[min_anio]['regtotal'], anios[min_anio]['regvalidos'], anios[min_anio]['reginvalidos'], anios[min_anio]['survey'], anios[min_anio]['census']
     max_regtotal, max_regval, max_reginval, maxsur, maxcen = anios[max_anio]['regtotal'], anios[max_anio]['regvalidos'], anios[max_anio]['reginvalidos'], anios[max_anio]['survey'], anios[max_anio]['census']
-
-    return registros_total, min_anio, min_valor, min_regtotal, min_regval, min_reginval, minsur, mincen, max_anio, max_valor, max_regtotal, max_regval, max_reginval, maxsur, maxcen
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+    return registros_total, min_anio, min_valor, min_regtotal, min_regval, min_reginval, minsur, mincen, max_anio, max_valor, max_regtotal, max_regval, max_reginval, maxsur, maxcen, tiempo_total
 
 def req_8(catalog):
     """
     Retorna el resultado del requerimiento 8
     """
+    tiempo_inicial = get_time()
     registros = catalog['registros']['elements']
     size = catalog['registros']['size']
     
@@ -320,7 +326,10 @@ def req_8(catalog):
         
         i += 1
         
-    return total_departamentos, total_tiempo, total_registros ,departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia
+    tiempo_final = get_time()
+    tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+    
+    return total_departamentos, total_tiempo, total_registros ,departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia, tiempo_total
     
     
    

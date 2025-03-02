@@ -1,6 +1,7 @@
 import sys
 import App.logic as logic
 from tabulate import tabulate
+import time
 
 
 def new_logic():
@@ -19,6 +20,19 @@ def format_table(data, headers, max_col_width=15):
 
     return tabulate(formatted_data, headers=headers, tablefmt="grid")
 
+def get_time():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def delta_time(start, end):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed
 
 def print_menu():
     print("Bienvenido")
@@ -67,10 +81,12 @@ def print_req_3(control, departamento, inicial, final):
     """
         Función que imprime la solución del Requerimiento 3 en consola
     """
-    res, census, survey = logic.req_3(control, departamento, inicial, final)
+    res, census, survey, tiempo_total = logic.req_3(control, departamento, inicial, final)
     headers = ['source','year_collection','load_time','freq_collection','commodity','unit_measurement']
     size = res['size']
     elements = res['elements'][:size]
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
+
     if size == 0:
         print('No se encontraron registros para esos parámetros. Intente de nuevo.')
     else:
@@ -165,11 +181,11 @@ def print_req_7(control, departamento, inicial, final):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     
-    registros_total, min_anio, min_valor, min_regtotal, min_regval, min_reginval, minsur, mincen, max_anio, max_valor, max_regtotal, max_regval, max_reginval, maxsur, maxcen = logic.req_7(control, departamento, inicial, final)
+    registros_total, min_anio, min_valor, min_regtotal, min_regval, min_reginval, minsur, mincen, max_anio, max_valor, max_regtotal, max_regval, max_reginval, maxsur, maxcen, tiempo_total = logic.req_7(control, departamento, inicial, final)
     if min_anio == max_anio:
         print('El menor y el mayor periodo de tiempo son el mismo.')
     
-    print('Tiempo de ejecución: \n')
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
     print('Número total de registros  que cumplieron el filtro: ' + str(registros_total))
     
     min_data = [
@@ -203,7 +219,8 @@ def print_req_8(control):
     """
         Función que imprime la solución del Requerimiento 8 en consola
     """
-    total_departamentos, total_tiempo, total_registros, departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia = logic.req_8(control)
+    total_departamentos, total_tiempo, total_registros, departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia, tiempo_total = logic.req_8(control)
+    print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
     general = [
         ['Total departamentos', total_departamentos],
         ['Total registros', total_registros],
@@ -259,7 +276,11 @@ def main():
         inputs = input('Seleccione una opción para continuar\n')
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
+            tiempo_inicial = get_time()
             registros, size, menor, mayor, primeros, ultimos, headers = load_data(control)
+            tiempo_final = get_time()
+            tiempo_total = delta_time(tiempo_inicial, tiempo_final)
+            print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
             
             print(f"Total registros cargados: {size}")
             

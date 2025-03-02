@@ -66,7 +66,24 @@ def print_req_1(control):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    anio_interes = int(input("Ingrese el año de interés para buscar el último registro: "))
+
+    registro, execution_time = logic.req_1(control, anio_interes)
+
+    print(f"\nTiempo de ejecución: {execution_time:.6f} milisegundos")
+
+    if registro:
+        print("\nÚltimo registro recopilado en el año", anio_interes)
+        print(f"Año de recolección: {registro['year_collection']}")
+        print(f"Fecha de carga: {registro['load_time']}")
+        print(f"Tipo de fuente: {registro['source']}")
+        print(f"Frecuencia de recolección: {registro['freq_collection']}")
+        print(f"Nombre del departamento: {registro['state_name']}")
+        print(f"Tipo de producto: {registro['commodity']}")
+        print(f"Unidad de medición: {registro['unit_measurement']}")
+        print(f"Valor de la medición: {registro['value']}")
+    else:
+        print(f"No se encontraron registros para el año {anio_interes}.")
 
 
 def print_req_2(control):
@@ -74,7 +91,23 @@ def print_req_2(control):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    departamento = input('Ingrese el nombre del departamento a filtrar: ')
+
+    tiempo_total, respuesta = logic.req_2(control, departamento)
+
+    if respuesta:
+        print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
+        print(f"Último registro cargado en {departamento}:")
+        print(f"Año de recolección: {respuesta['year_collection']}")
+        print(f"Fecha de carga: {respuesta['load_time']}")
+        print(f"Tipo de fuente: {respuesta['source']}")
+        print(f"Frecuencia de recolección: {respuesta['freq_collection']}")
+        print(f"Nombre del departamento: {respuesta['state_name']}")
+        print(f"Tipo de producto: {respuesta['commodity']}")
+        print(f"Unidad de medición: {respuesta['unit_measurement']}")
+        print(f"Valor de la medición: {respuesta['value']}")
+    else:
+        print(f"No se encontraron registros para el departamento {departamento}.")
 
 
 def print_req_3(control, departamento, inicial, final):
@@ -109,6 +142,33 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
+    producto = input("Ingrese el tipo de producto a filtrar (ej. 'HOGS', 'SHEEP'): ")
+    anio_inicial = int(input("Ingrese el año inicial de búsqueda: "))
+    anio_final = int(input("Ingrese el año final de búsqueda: "))
+
+    execution_time, resultado = logic.req_4(control, producto, anio_inicial, anio_final)
+
+    registros, total_registros, survey_count, census_count = resultado
+    headers = ['source', 'year_collection', 'load_time', 'freq_collection', 'state_name', 'unit_measurement']
+
+    print(f"\nTiempo de ejecución: {execution_time:.6f} milisegundos")
+    print(f"Total registros encontrados: {total_registros}")
+    print(f"Total registros encontrados con fuente CENSUS: {census_count}")
+    print(f"Total registros encontrados con fuente SURVEY: {survey_count}")
+
+    if total_registros == 0:
+        print("No se encontraron registros para esos parámetros.")
+    else:
+        if total_registros > 20:
+            head, tail = logic.head_y_tail({'elements': registros, 'size': total_registros})
+            print("\nPrimeros 5 registros:")
+            print(format_table(head, headers, max_col_width=12))
+
+            print("\nÚltimos 5 registros:")
+            print(format_table(tail, headers, max_col_width=12))
+        else:
+            print(format_table(registros, headers, max_col_width=12))
+
     
 
 def print_req_5(control):

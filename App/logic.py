@@ -215,8 +215,93 @@ def req_8(catalog):
     """
     Retorna el resultado del requerimiento 8
     """
-    # TODO: Modificar el requerimiento 8
-    pass
+    registros = catalog['registros']['elements']
+    size = catalog['registros']['size']
+    
+    i = 0
+    
+    total_departamentos = 0
+    
+    total_registros = 0
+    total_tiempo = 0
+    
+    menor_anio_rec = 0
+    mayor_anio_rec = 0
+    
+    mayor_diferencia= float('-inf')
+    mayor_estado = None
+    
+    departamentos = {}
+    
+    while i < size and registros[i] != None:
+        state = registros[i]['state_name']
+        
+        if state not in departamentos:
+            total_departamentos += 1
+            departamentos[state] = {
+            'tiempo_promedio': 0,
+            'registros': 0,
+            'anio_menor': None,
+            'anio_mayor':None,
+            'tiempo_menor':None,
+            'tiempo_mayor':None,
+            'survey':0,
+            'census':0
+        }
+        
+        load_year =  int(registros[i]['load_time'][:4])
+        collected_year = int(registros[i]['year_collection'])
+        diferencia = load_year-collected_year
+        
+        
+        departamentos[state]['registros'] += 1
+        
+        #handle el calculo del promedio tiempo del state
+        departamentos[state]['tiempo_promedio'] += (diferencia - departamentos[state]['tiempo_promedio'])/departamentos[state]['registros']
+        
+        #handle el calculo del promedio tiempo de tooodos los states
+        total_registros +=1
+        total_tiempo += (diferencia - total_tiempo)/total_registros
+        #handle comparacion de estado con mayor diferencia
+        if departamentos[state]['tiempo_promedio'] > mayor_diferencia:
+            mayor_diferencia = departamentos[state]['tiempo_promedio']
+            mayor_estado = state
+        
+        #handle menor y mayor anio total
+        menor_anio_rec = min(
+            collected_year, menor_anio_rec or collected_year
+        )
+        mayor_anio_rec = max(
+            collected_year, mayor_anio_rec or collected_year
+        )
+        
+        #handle menor y mayor diferencia entre reco y carga de cada estado
+        departamentos[state]['tiempo_menor'] = min(
+            diferencia, departamentos[state]['tiempo_menor'] or diferencia
+        )
+        departamentos[state]['tiempo_mayor'] = max(
+            diferencia, departamentos[state]['tiempo_mayor'] or diferencia
+        )
+        
+        #handle año mayor y menor de recoleccion de cada estado
+        departamentos[state]['anio_menor'] = min(
+            collected_year, departamentos[state]['anio_menor'] or collected_year
+        )
+        departamentos[state]['anio_mayor'] = max(
+            collected_year, departamentos[state]['anio_mayor'] or collected_year
+        )
+        #handle suveyr y census
+        if registros[i]['source'] == 'CENSUS':
+            departamentos[state]['census'] += 1 
+        if registros[i]['source'] == 'SURVEY':
+            departamentos[state]['survey'] += 1 
+        
+        i += 1
+        
+    return total_departamentos, total_tiempo, total_registros ,departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia
+    
+    
+   
 
 
 # Funciones para medir tiempos de ejecucion

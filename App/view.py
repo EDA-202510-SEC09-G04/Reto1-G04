@@ -155,9 +155,46 @@ def print_req_8(control):
     """
         Función que imprime la solución del Requerimiento 8 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 8
-    pass
+    total_departamentos, total_tiempo, total_registros, departamentos, menor_anio_rec, mayor_anio_rec, mayor_estado, mayor_diferencia = logic.req_8(control)
+    general = [
+        ['Total departamentos', total_departamentos],
+        ['Total registros', total_registros],
+        ['Tiempo promedio total', total_tiempo],
+        ['Menor año recopilación', menor_anio_rec],
+        ['Mayor año recopilación', mayor_anio_rec],
+    ]
+    
+    dep_mayor = [
+        ['Nombre', mayor_estado],
+        ['Tiempo promedio', mayor_diferencia],
+        ['Menor año recopilación', departamentos[mayor_estado]['anio_menor']],
+        ['Mayor año recopilación', departamentos[mayor_estado]['anio_mayor']],
+        ['Tiempo dif menor', departamentos[mayor_estado]['tiempo_menor']],
+        ['Tiempo dif mayor', departamentos[mayor_estado]['tiempo_mayor']],
+        ['Survey', departamentos[mayor_estado]['survey']],
+        ['Census', departamentos[mayor_estado]['census']]
+    ]
+    
+    data = [
+        [state, data["tiempo_promedio"], data["registros"], data["anio_menor"], data["anio_mayor"], 
+        data["tiempo_menor"], data["tiempo_mayor"], data["survey"], data["census"]] 
+        for state, data in departamentos.items()
+    ]
+    headers = ["Departamento", "Tiempo Promedio", "# Registros", "Año Menor", "Año Mayor", "Tiempo Menor", "Tiempo Mayor", "# Survey", "# Census"]
+    max_col_width = 10
 
+    formateado = [
+        [str(row[col])[:max_col_width] + ("..." if len(str(row[col])) > max_col_width else "") for col in range(len(headers))]
+        for row in data
+    ]
+    print("\nDATOS GENERALES")
+    print(tabulate(general, tablefmt="grid"))
+    
+    print("\nDATOS DEPARTAMENTO MAYOR TIEMPO")
+    print(tabulate(dep_mayor, tablefmt="grid"))
+    
+    print("\nPROMEDIO DE CADA DEPARTAMENTO")
+    print(tabulate(formateado, headers=headers, tablefmt="grid"))
 
 # Se crea la lógica asociado a la vista
 control = new_logic()

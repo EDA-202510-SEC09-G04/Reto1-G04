@@ -148,16 +148,18 @@ def req_5(catalog,categoria, anio_inicial, anio_final):
     
     tiempo_inicial = get_time()
     
-    for i in range(size):
+    i = 0
+    while i < size and registros[i] != None:
         registro = registros[i]
-        año = int(registro['year_collection'])
+        anio = int(registro['year_collection'])
         
-        if registro["statical_category"] == categoria and anio_inicial <= año <= anio_final:
+        if registro["statical_category"] == categoria and anio >= anio_inicial and anio <= anio_final:
             lt.add_last(respuestas, registro)
             if registro['source'] == 'CENSUS':
                 census_contador += 1
             elif registro['source'] == 'SURVEY':
                 survey_contador += 1
+        i +=1
                 
     tiempo_final = get_time()
     tiempo_total = delta_time(tiempo_inicial, tiempo_final)

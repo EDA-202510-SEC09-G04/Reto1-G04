@@ -96,7 +96,7 @@ def ultimo_registro(catalogo,anio):
     
     elementos = catalogo['registros']['elements']
     size = catalogo['registros']['size']
-    elementos_list = lt.new_list()
+    elemento_ultimo = None
     mayor = 0 
     datos = 0
     i = 0
@@ -113,7 +113,7 @@ def ultimo_registro(catalogo,anio):
             
             if year == anio and mayor < tiempo_carga:
                 
-                lt.add_last(elementos_list, index_el)
+                elemento_ultimo = elementos[i]
                 
             elif year == anio:
                  
@@ -124,7 +124,7 @@ def ultimo_registro(catalogo,anio):
         i += 1
         
         
-    return lt.first_element(elementos_list), datos
+    return elemento_ultimo, datos
     
     
     
@@ -272,13 +272,9 @@ def registros_producto(catalogo,prod,anio_inicial,anio_final):
     
     
     
-     if lt.size(elementos_list) > 20:
+
          
-         return [elementos_list['elements'][:5], elementos_list['elements'][-5:]] , lt.size(elementos_list) , survey, census   
-     
-     else:
-         
-         return elementos_list, lt.size(elementos_list), survey,census
+     return elementos_list, lt.size(elementos_list), survey,census
             
             
 

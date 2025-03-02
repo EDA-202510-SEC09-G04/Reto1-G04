@@ -65,16 +65,44 @@ def print_req_1(control):
     """
         Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    
+    anio_interes = int(input('Dame el año que desea consultar: '))
+    
+    diferencia_tiempo,registro_ultimo, datos_filtrados = logic.req_1(control,anio_interes)
+    
+    print(f'Tiempo de ejecución {diferencia_tiempo:.6f} milisegundos')
+     
+    if registro_ultimo is None:
+        
+        print('No se encontró registro para este año')
+        
+    else:
+        
+        print(f'El último registro es : {registro_ultimo}')
+        print(f'La cantidad de datos filtrados son: {datos_filtrados}')
+        
+    
 
 
 def print_req_2(control):
     """
         Función que imprime la solución del Requerimiento 2 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    departamento_interes= input('Deme el departamento que desea consultar: ')
+    
+    diferencia_tiempo, numero_datos,ultimo_registro = logic.req_2(control,departamento_interes)
+    
+    
+    print(f'Tiempo de ejecución{diferencia_tiempo}')
+    if ultimo_registro is None:
+        
+        print('No hay registros para este departamento')
+        
+    else:
+        
+        print(f'El último registro para este departamento es :{ultimo_registro}')
+        print(f'El número de datos filtrados son: {numero_datos}')
+    
 
 
 def print_req_3(control, departamento, inicial, final):
@@ -108,14 +136,14 @@ def print_req_4(control):
     """
         Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
+    diferencia_tiempo,lista_elementos,size,survey_count,census_count = logic.req_4()
     
 
 def print_req_5(control):
     """
         Función que imprime la solución del Requerimiento 5 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 5
+    
     categoria = input('Ingrese la categoría estadística a filtrar (ej. "INVENTORY", "SALES"): ')
     anio_inicial = int(input('Ingrese el año inicial de búsqueda: '))
     anio_final = int(input('Ingrese el año final de búsqueda: '))

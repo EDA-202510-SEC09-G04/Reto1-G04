@@ -68,10 +68,10 @@ def print_req_1(control):
     # TODO: Imprimir el resultado del requerimiento 1
     anio_interes = int(input("Ingrese el año de interés para buscar el último registro: "))
 
-    registro, execution_time = logic.req_1(control, anio_interes)
+    execution_time,registro,datos = logic.req_1(control, anio_interes)
 
     print(f"\nTiempo de ejecución: {execution_time:.6f} milisegundos")
-
+    
     if registro:
         print("\nÚltimo registro recopilado en el año", anio_interes)
         print(f"Año de recolección: {registro['year_collection']}")
@@ -93,7 +93,7 @@ def print_req_2(control):
     # TODO: Imprimir el resultado del requerimiento 2
     departamento = input('Ingrese el nombre del departamento a filtrar: ')
 
-    tiempo_total, respuesta = logic.req_2(control, departamento)
+    tiempo_total, respuesta, datos= logic.req_2(control, departamento)
 
     if respuesta:
         print(f"\nTiempo de ejecución: {tiempo_total:.6f} milisegundos")
@@ -146,9 +146,8 @@ def print_req_4(control):
     anio_inicial = int(input("Ingrese el año inicial de búsqueda: "))
     anio_final = int(input("Ingrese el año final de búsqueda: "))
 
-    execution_time, resultado = logic.req_4(control, producto, anio_inicial, anio_final)
+    execution_time, registros,total_registros,survey_count, census_count = logic.req_4(control, producto, anio_inicial, anio_final)
 
-    registros, total_registros, survey_count, census_count = resultado
     headers = ['source', 'year_collection', 'load_time', 'freq_collection', 'state_name', 'unit_measurement']
 
     print(f"\nTiempo de ejecución: {execution_time:.6f} milisegundos")
@@ -160,7 +159,7 @@ def print_req_4(control):
         print("No se encontraron registros para esos parámetros.")
     else:
         if total_registros > 20:
-            head, tail = logic.head_y_tail({'elements': registros, 'size': total_registros})
+            head, tail = logic.head_y_tail(registros)
             print("\nPrimeros 5 registros:")
             print(format_table(head, headers, max_col_width=12))
 
@@ -351,7 +350,7 @@ def main():
             print_req_1(control)
 
         elif int(inputs) == 3:
-            print_req_2()
+            print_req_2(control)
 
         elif int(inputs) == 4:
             departamento = input('Ingrese el departamento que quiere consultar: ')

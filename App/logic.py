@@ -114,13 +114,17 @@ def ultimo_registro(catalogo,anio):
     elementos = catalogo['registros']['elements']
     size = catalogo['registros']['size']
     elemento_ultimo = None
-    mayor = 0 
+    
     datos = 0
     i = 0
     
+    if size > 0 :
+        
+        mayor = datetime.strptime(elementos[0]['load_time'],'%Y-%m-%d %H:%M:%S')
+    
     while  i < size and elementos[i] is not None:
         
-        tiempo_carga = datetime.striptime(elementos[i]['load_time'])
+        tiempo_carga = datetime.strptime(elementos[i]['load_time'],'%Y-%m-%d %H:%M:%S')
         index_el = elementos[i]
         
         if index_el is not  None and 'year_collection' in index_el:
@@ -144,7 +148,7 @@ def ultimo_registro(catalogo,anio):
     return elemento_ultimo, datos
     
     
-    
+
 
 
 def req_1(catalog,anio_interes):
@@ -155,15 +159,20 @@ def req_1(catalog,anio_interes):
    
     
     inicio = get_time()
-    result = ultimo_registro(catalog,anio_interes)
+    registro, datos = ultimo_registro(catalog,anio_interes)
     fin = get_time()
     dif = fin - inicio
     
     
-    return dif , result
+    return dif , registro, datos
     
     
-    
+
+catalogo = new_logic()
+
+load_data(catalogo)
+
+
 
     
 def registro_departamento(catalogo,dep):
@@ -171,13 +180,14 @@ def registro_departamento(catalogo,dep):
     elementos = catalogo['registros']['elements']
     size = catalogo['registros']['size']
     i = 0
-    mayor = 0 
+    mayor = datetime.strptime(elementos[0]['load_time'],'%Y-%m-%d %H:%M:%S')
     num_datos = 0
     ultimo_registro = None
     
     while i < size and elementos[i] is not None:
         
-        tiempo_carga = datetime.strptime(elementos[i]['load_time'])
+        tiempo_carga = datetime.strptime(elementos[i]['load_time'],'%Y-%m-%d %H:%M:%S')
+        
         departamento = elementos[i]['state_name']
         
         if mayor < tiempo_carga and departamento == dep :
@@ -195,7 +205,7 @@ def registro_departamento(catalogo,dep):
         i += 1
         
         
-    return num_datos,ultimo_registro
+    return ultimo_registro, num_datos
             
             
             
@@ -209,13 +219,15 @@ def req_2(catalog,dep):
     Retorna el resultado del requerimiento 2
     """
     inicio = get_time()
-    resultado = registro_departamento(catalog,dep)
+    ultimo_registro, num_datos= registro_departamento(catalog,dep)
     final = get_time()
     
     dif = final -inicio
     
     
-    return dif, resultado
+    return dif, ultimo_registro, num_datos
+
+
 
 
 def req_3(catalog, departamento, inicial, final):
@@ -297,9 +309,7 @@ def registros_producto(catalogo,prod,anio_inicial,anio_final):
             
 
 
-catalogo = new_logic()
 
-load_data(catalogo)
 
 
 
@@ -308,14 +318,14 @@ def req_4(catalog,prod,anio_inicial,anio_final):
     Retorna el resultado del requerimiento 4
     """
     inicio = get_time()
-    resultado = registros_producto(catalog,prod,anio_inicial,anio_final)
+    lista_el, tamanio, survey, census = registros_producto(catalog,prod,anio_inicial,anio_final)
     final = get_time()
     dif = final - inicio
     
-    return dif, resultado
+    return dif, lista_el,tamanio,survey,census
 
 
-print(req_4(catalogo,'HOGS',1990,2007))
+
 
 
 
